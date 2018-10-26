@@ -13,20 +13,20 @@ On average, just about everyone! Most loans -- that are repaid -- are paid off m
 
 Some data from a peer to peer lending site (Lending Club). Starting with the average loan amount by credit grade (the following are for loans that were actually repaid).
 
-<code>
->>>df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.loan_amnt)).sort(df.grade).show()
-+-----+------------------+                                                      
-|grade|    avg(loan_amnt)|
-+-----+------------------+
-|    A|17904.845276872966|
-|    B|20331.642156862745|
-|    C| 19862.38723108952|
-|    D|21079.974663808225|
-|    E|22537.631738954195|
-|    F|22071.177722596665|
-|    G|23593.793103448275|
-+-----+------------------+
-</code>
+
+    >>>df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.loan_amnt)).sort(df.grade).show()
+    +-----+------------------+                                                      
+    |grade|    avg(loan_amnt)|
+    +-----+------------------+
+    |    A|17904.845276872966|
+    |    B|20331.642156862745|
+    |    C| 19862.38723108952|
+    |    D|21079.974663808225|
+    |    E|22537.631738954195|
+    |    F|22071.177722596665|
+    |    G|23593.793103448275|
+    +-----+------------------+
+
 and the average installment (on 60 month) by the credit grade..
 
 
