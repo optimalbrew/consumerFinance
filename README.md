@@ -30,34 +30,34 @@ Some data from a peer to peer lending site (Lending Club). Starting with the ave
 and the average installment (on 60 month) by the credit grade..
 
 
->>> df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.installment)).sort(df.grade).show()
-+-----+------------------+                                                      
-|grade|  avg(installment)|
-+-----+------------------+
-|    A|370.47410423452726|
-|    B| 452.7048333333333|
-|    C| 481.0489947457135|
-|    D| 544.1392360163711|
-|    E| 616.5258289420351|
-|    F| 629.8699680737872|
-|    G| 695.2376379310348|
-+-----+------------------+
+    >>> df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.installment)).sort(df.grade).show()
+    +-----+------------------+                                                      
+    |grade|  avg(installment)|
+    +-----+------------------+
+    |    A|370.47410423452726|
+    |    B| 452.7048333333333|
+    |    C| 481.0489947457135|
+    |    D| 544.1392360163711|
+    |    E| 616.5258289420351|
+    |    F| 629.8699680737872|
+    |    G| 695.2376379310348|
+    +-----+------------------+
 
 taking the ratio provides the number of installments that must be received for investors to break even.
 
 
->>> df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.loan_amnt)/F.mean(df.installment)).sort(df.grade).show()
-+-----+------------------------------------------------+                        
-|grade|(avg(loan_amnt) / avg(installment)              |
-+-----+------------------------------------------------+
-|    A|                               48.32954603903535|
-|    B|                               44.91147577806454|
-|    C|                               41.28973856725123|
-|    D|                               38.74003796920464|
-|    E|                              36.555859756320366|
-|    F|                               35.04084785958727|
-|    G|                               33.93630007382986|
-+-----+------------------------------------------------+
+    >>>df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.loan_amnt)/F.mean(df.installment)).sort(df.grade).show()
+    +-----+------------------------------------------------+                        
+    |grade|(avg(loan_amnt) / avg(installment)              |
+    +-----+------------------------------------------------+
+    |    A|                               48.32954603903535|
+    |    B|                               44.91147577806454|
+    |    C|                               41.28973856725123|
+    |    D|                               38.74003796920464|
+    |    E|                              36.555859756320366|
+    |    F|                               35.04084785958727|
+    |    G|                               33.93630007382986|
+    +-----+------------------------------------------------+
 
 
 From the plot we can see that loans are being repaid faster than the breakeven period. So investors do not earn the interest rates they hope to.
