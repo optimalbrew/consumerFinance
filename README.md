@@ -13,7 +13,7 @@ On average, just about everyone! Most loans -- that are repaid -- are paid off m
 
 Some data from a peer to peer lending site (Lending Club). Starting with the average loan amount by credit grade (the following are for loans that were actually repaid).
 
-
+<code>
 >>>df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.loan_amnt)).sort(df.grade).show()
 +-----+------------------+                                                      
 |grade|    avg(loan_amnt)|
@@ -26,7 +26,7 @@ Some data from a peer to peer lending site (Lending Club). Starting with the ave
 |    F|22071.177722596665|
 |    G|23593.793103448275|
 +-----+------------------+
-
+</code>
 and the average installment (on 60 month) by the credit grade..
 
 
@@ -70,11 +70,11 @@ In the plots, for loans with longer maturity, it appears that those with poorer 
 
 Regression analysis reveals that the credit grade by itself is not statistically or even economically significant in terms of repayment timeline. What drives the results is the interest rate. The following estimates are from a regression analysis of 60 month loans that were repaid.
 
-    A 1 percentage point increase in the interest rate can move the repayment ahead by 1 month (from the average repayment period of 32 months). 
-    Regression analysis also reveals that those who own their homes pay off their loans about 2 months before those who rent. Those with a mortgage take a couple of weeks longer than home owners.
-    A 10 percentage point increase in a borrower's debt to income ratio is associated with a delay of 2 months (from the average of 32 payments).
-    Each additional $50 in monthly installments is associated with a week's additional time in repaying the loan.
-    After accounting for other factors, variations in annual income or employment length do not have much impact on the repayment timeline. 
-    Those who provide no additional description for their loan (apart from a broad label like 'debt consolidation' repay their loans about a month earlier than those who provide detailed descriptions. From the public data set, it is not possible to measure if this has any impact on initial loan approval decisions
+* A 1 percentage point increase in the interest rate can move the repayment ahead by 1 month (from the average repayment period of 32 months). 
+* Regression analysis also reveals that those who own their homes pay off their loans about 2 months before those who rent. Those with a mortgage take a couple of weeks longer than home owners.
+* A 10 percentage point increase in a borrower's debt to income ratio is associated with a delay of 2 months (from the average of 32 payments).
+* Each additional $50 in monthly installments is associated with a week's additional time in repaying the loan.
+* After accounting for other factors, variations in annual income or employment length do not have much impact on the repayment timeline. 
+* Those who provide no additional description for their loan (apart from a broad label like 'debt consolidation' repay their loans about a month earlier than those who provide detailed descriptions. From the public data set, it is not possible to measure if this has any impact on initial loan approval decisions
 
 Data from Lending Club: About 183,000 loans in this sample.
