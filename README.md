@@ -78,3 +78,6 @@ Regression analysis reveals that the credit grade by itself is not statistically
 * Those who provide no additional description for their loan (apart from a broad label like 'debt consolidation' repay their loans about a month earlier than those who provide detailed descriptions. From the public data set, it is not possible to measure if this has any impact on initial loan approval decisions
 
 Data from Lending Club: About 183,000 loans in this sample.
+## Files
+* Bash script to download data. The first line should be removed either manually, or awk "NR!=1" file > outfile etc.. The rejectstats files are not really informative.
+* Straightforward ETL and regression done using pySpark/SparkSQL (on a single source csv file, not aggregated data).
