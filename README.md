@@ -79,5 +79,5 @@ Regression analysis reveals that the credit grade by itself is not statistically
 
 Data from Lending Club: About 183,000 loans in this sample.
 ## Files
-* Bash script to download data. The first line should be removed either manually, or awk "NR!=1" file > outfile etc.. The rejectstats files are not really informative.
-* Straightforward ETL and regression done using pySpark/SparkSQL (on a single source csv file, not aggregated data).
+* DataDl.sh Bash script to download data. The first line should be removed either manually, or awk "NR!=1" file > outfile etc.. The rejectstats files are not really informative.
+* Straightforward ETL and regression done using pySpark/SparkSQL (on a single source csv file, not aggregated data). sprkLCprePay.py for default and repayment stats for the plot, and repayRegs.py for the regressions. barplot.py for the bar plots and pdDefRate.csv (plot data). 
