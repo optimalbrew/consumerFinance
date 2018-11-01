@@ -1,6 +1,10 @@
 # Early repayment in personal loan markets
 Investors in fixed income securities (like p2p lending) must account for the possibility of default. This is made easier by credit ratings. However, early debt repayment can also hurt investors by altering their expected cash flow streams and leaving them with excess liquidity. This is especially a problem for those who do not have automated reinvestment strategies (most investors in peer to peer personal loans markets?).
 
+![Map of early repayment](./LC2017to18.png)
+
+The map shows a ratio of the rate of early repayment over the rate of default for 2017-18. Ratio actually understates the rate of early repayment because there is an adjustment to avoid division by zero errors. As macroeconomic conditions change, we anticipate early repayment and default rates to move in opposite directions.
+
 ![LC Default and Repayment plot](./subplotsNoError.png)
 
 We expect higher default rates for loans with poorer credit ratings. As for the timing of default, we expect lower rated debt to default earlier (all else equal). As long as default rates are in line with what investors expect, there is not much cause for concern. Investors are hurt only if default rates exceed expected levels by a significant margin.
