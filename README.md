@@ -1,5 +1,5 @@
 # Early repayment in personal loan markets
-Using feed forward neural nets to study early repayment, default, and timing (of early repayment or default).  
+Using feed forward neural nets (in PyTorch) to study early repayment, default, and timing (of early repayment or default).  
 
 Investors in fixed income securities (like p2p lending) must account for the possibility of default. This is made easier by credit ratings. However, early debt repayment can also hurt investors by altering their expected cash flow streams and leaving them with excess liquidity. This is especially a problem for those who do not have automated reinvestment strategies (most investors in peer to peer personal loans markets?).
 
@@ -97,3 +97,4 @@ Data from Lending Club: About 183,000 loans in this sample.
 ## Files
 * DataDl.sh Bash script to download data. The first line should be removed either manually, or awk "NR!=1" file > outfile etc.. The rejectstats files are not really informative.
 * Straightforward ETL and regression done using pySpark/SparkSQL (on a single source csv file, not aggregated data). sprkLCprePay.py for default and repayment stats for the plot, and repayRegs.py for the regressions. barplot.py for the bar plots and pdDefRate.csv (plot data). 
+* Example data prep for NN in prepDataforNN.py The Feed Forward Neural Net using pyTorch in modelLendNN.py
