@@ -1,5 +1,5 @@
 # Early repayment in personal loan markets
-Using feed forward neural nets (in PyTorch) to study early repayment, default, and timing (of early repayment or default).  
+Using feed forward neural nets (in PyTorch) and regression analysis (Apache Spark, with PySpark) to study early repayment, default, and timing (of early repayment or default).  
 
 Investors in fixed income securities (like p2p lending) must account for the possibility of default. This is made easier by credit ratings. However, early debt repayment can also hurt investors by altering their expected cash flow streams and leaving them with excess liquidity. This is especially a problem for those who do not have automated reinvestment strategies.
 
