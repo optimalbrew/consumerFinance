@@ -27,7 +27,7 @@ Predicted default timeline (number of payments)
 
 On average, just about everyone! Most loans -- that are repaid -- are paid off much before the maturity date.
 
-Some data from a peer to peer lending site (Lending Club). Starting with the average loan amount by credit grade (the following are for loans that were actually repaid).
+A summary of the average loan amount by credit grade (the following are for loans that were actually repaid).
 
 
     >>>df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.loan_amnt)).sort(df.grade).show()
