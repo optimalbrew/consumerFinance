@@ -1,4 +1,6 @@
 # Early repayment in personal loan markets
+Using feed forward neural nets to study early repayment, default, and timing (of early repayment or default).  
+
 Investors in fixed income securities (like p2p lending) must account for the possibility of default. This is made easier by credit ratings. However, early debt repayment can also hurt investors by altering their expected cash flow streams and leaving them with excess liquidity. This is especially a problem for those who do not have automated reinvestment strategies (most investors in peer to peer personal loans markets?).
 
 ![Map of early repayment](./LC2017to18.png)
@@ -10,6 +12,16 @@ The map shows a ratio of the rate of early repayment over the rate of default fo
 We expect higher default rates for loans with poorer credit ratings. As for the timing of default, we expect lower rated debt to default earlier (all else equal). As long as default rates are in line with what investors expect, there is not much cause for concern. Investors are hurt only if default rates exceed expected levels by a significant margin.
 
 I am more interested in studying early repayment than defaul. Unlike default, early repayment is always a rational and strategic decision, one that requires cognitive effort and self-control. The decision also displays optimism and confidence, especially if there is a lot of time left on the clock. Of course, one could run a multivariate regression to jointly predict the likelihood repayment or default and the respective conditional likelihoods for the timeline.
+
+## Predictions from neural nets
+Overall predictions (means)
+![Overall predictions](predsNNOverall.png)
+
+Predicted early repayment timeline (number of payments)
+![Overall predictions](predsNNDensityERCond.png)
+
+Predicted default timeline (number of payments)
+![Overall predictions](predsNNDensityDefCond.png)
 
 ## So who is repaying earlier than expected and is this really a problem?
 
