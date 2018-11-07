@@ -94,7 +94,11 @@ Regression analysis reveals that the credit grade by itself is not statistically
 * Those who provide no additional description for their loan (apart from a broad label like 'debt consolidation' repay their loans about a month earlier than those who provide detailed descriptions. From the public data set, it is not possible to measure if this has any impact on initial loan approval decisions
 
 Data from Lending Club: About 183,000 loans in this sample.
+
 ## Files
-* DataDl.sh Bash script to download data. The first line should be removed either manually, or awk "NR!=1" file > outfile etc.. The rejectstats files are not really informative.
-* Straightforward ETL and regression done using pySpark/SparkSQL (on a single source csv file, not aggregated data). sprkLCprePay.py for default and repayment stats for the plot, and repayRegs.py for the regressions. barplot.py for the bar plots and pdDefRate.csv (plot data). 
-* Example data prep for NN in prepDataforNN.py The Feed Forward Neural Net using pyTorch in modelLendNN.py
+* **DataDl.sh** :Bash script to download data. The first line should be removed either manually, or awk "NR!=1" file > outfile  The rejectstats files are not really informative, so that part can be commented out.
+* **cleanWalk.sh** this script is a crosswalk from ZIPxx (only first 3 digits available, last 2 digits hidden) to County FIPS Code. ZIPxx cannot be mapped to a unique code. For example, 787xx (Austin, TX area zip codes) can belong to three differenti counties (Hays, Travis, Williamson). This script provides the odds ratios for assign a ZIPxx to a list of potential counties. 
+* **fipsLendMap.py** is the  (pySpark/SparkSQL) code to join the lending club data with the ZIPXX to FIPS codes available in **utZipLowerXX.csv**
+*  **sprkLCprePay.py** for default and repayment stats, **repayRegs.py** (pySpark/SparkML) for the regressions.
+* Example data prep for Neural Nets in **prepDataforNN.py** and the Feed Forward Neural Net using pyTorch in **modelLendNN.py**
+* **barplot.py** for the bar plots and **pdDefRate.csv** (bar plot data). 
