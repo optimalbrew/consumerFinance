@@ -96,8 +96,8 @@ Regression analysis reveals that the credit grade by itself is not statistically
 Data from Lending Club: About 183,000 loans in this sample.
 
 ## Files
-* **DataDl.sh** :Bash script to download data. The first line should be removed either manually, or awk "NR!=1" file > outfile  The rejectstats files are not really informative, so that part can be commented out.
-* **cleanWalk.sh** this script is a crosswalk from ZIPxx (only first 3 digits available, last 2 digits hidden) to County FIPS Code. ZIPxx cannot be mapped to a unique code. For example, 787xx (Austin, TX area zip codes) can belong to three differenti counties (Hays, Travis, Williamson). This script provides the odds ratios for assign a ZIPxx to a list of potential counties. 
+* **DataDl.sh** Bash script to download data. The first line should be removed either manually, or awk "NR!=1" file > outfile etc. The rejectstats files are not really informative, so that part can be commented out.
+* **cleanWalk.sh** this script is a crosswalk from ZIPxx (only first 3 digits available, last 2 digits hidden) to County FIPS Code. ZIPxx cannot be mapped to a unique code. For example, 787xx (Austin, TX area zip codes) can belong to three counties (Hays, Travis, Williamson). This script provides the odds ratios for assign a ZIPxx to a list of potential counties. 
 * **fipsLendMap.py** is the  (pySpark/SparkSQL) code to join the lending club data with the ZIPXX to FIPS codes available in **utZipLowerXX.csv**
 *  **sprkLCprePay.py** for default and repayment stats, **repayRegs.py** (pySpark/SparkML) for the regressions.
 * Example data prep for Neural Nets in **prepDataforNN.py** and the Feed Forward Neural Net using pyTorch in **modelLendNN.py**
