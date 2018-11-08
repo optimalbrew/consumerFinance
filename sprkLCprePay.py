@@ -1,23 +1,13 @@
 """ 
-Default and Prepayment behavior by credit grade:
+Default and Prepayment behavior:
+Summarization by credit grade.
+
 """
 from __future__ import print_function
 
 from pyspark.sql import SparkSession
-#from pyspark.ml.feature import Tokenizer, RegexTokenizer
-#from pyspark.ml.feature import Word2Vec
-#from pyspark.ml.clustering import KMeans	
-
-#from pyspark.ml.regression import LinearRegression
-#from pyspark.ml.classification import LogisticRegression
-#from pyspark.ml.regression import RandomForestRegressor
-#from pyspark.ml.regression import GBTRegressor
-#from pyspark.sql import Row
 from pyspark.sql.types import *
-#from pyspark.ml.feature import VectorAssembler
-#from pyspark.ml.feature import RFormula
 import pyspark.sql.functions as F
-#from pyspark.ml.evaluation import RegressionEvaluator
 
 import pandas as pd
 
@@ -96,7 +86,7 @@ for i in months:
 
 
 df = df.withColumn('issue_d', (F.to_date('issue_d', 'MM-dd-yyyy')).alias('issue_d'))
-df = df.withColumn('last_pymnt_d', (F.to_date('last_pymnt_d', 'MM-dd-yyyy')).alias('last_pymnt_d'))
+df = df.withColumn('last_pymnt_d', F.to_date('last_pymnt_d', 'MM-dd-yyyy'))
 df = df.withColumn('mnth_start2last', F.months_between(df.last_pymnt_d, df.issue_d).alias('mnth_start2last'))
 df = df.withColumn('fracNumPmts', F.col('mnth_start2last')/F.col('term2'))
 		
@@ -104,66 +94,91 @@ df = df.withColumn('fracNumPmts', F.col('mnth_start2last')/F.col('term2'))
 df = df.na.fill({'desc': 'none' }) #perhaps doesn't matter?
 
 
+#df = df.drop('sub_grade', 'total_pymnt', 'last_pymnt_amnt', 'application_type')
+
 df2 = df #keep a backup
 #then drop rows with leftover na's
+
+df = df.drop("loan_amnt", "int_rate","sub_grade","home_ownership","annual_inc","application_type",
+	 "desc","emp_length", "dti", "revol_util","total_pymnt","installment","last_pymnt_amnt", "issue_d",
+	 	)
+
 df = df.na.drop(how='any')
 
 if df.count()>0:
 	del(df2) #if df is okay (did not lose all data!)
 
-#A summary of approximate stats. Lower relativeError for more precision, 0 is exact
-#df.filter(df.term2==60).filter(df.loan_status==0).approxQuantile(col=['mnth_start2last'], probabilities=[.25,.5,.75], relativeError=.15)
-#will not work wit groupBy + agg(). If required for groups, need to loop over, and filter by group
-
+df = df.drop('issue_d','last_pymnt_d','mnth_start2last')
 
 #Loan default rates (mean and stddev) by loan grade
 #mean
-def36mean = df.filter(df.term2==36).groupBy(df.grade).agg(F.mean(df.loan_status).alias('def36mean'))
-#standard dev.
-def36sd = df.filter(df.term2==36).groupBy(df.grade).agg(F.stddev(df.loan_status).alias('def36sd'))
+def36 = df.filter(df.term2==36).groupBy(df.grade).agg(F.mean(df.loan_status).alias('def36mean'),
+														F.stddev(df.loan_status).alias('def36sd'))
 
-#if needed
-#def36mean.show()
-#def36sd.show()
+def60 = df.filter(df.term2==60).groupBy(df.grade).agg(F.mean(df.loan_status).alias('def60mean'),
+														F.stddev(df.loan_status).alias('def60sd'))
+#stats on early repayment, compared to all loans (not just those that were repaid)
+df = df.withColumn('ER',F.when((df.fracNumPmts<1)&(df.loan_status==0),1).otherwise(0)) #create an indicator for repayment
 
-#default for 60 months
-def60mean = df.filter(df.term2==60).groupBy(df.grade).agg(F.mean(df.loan_status).alias('def60mean'))
-def60sd = df.filter(df.term2==60).groupBy(df.grade).agg(F.stddev(df.loan_status).alias('def60sd'))
+ER36 = df.filter(df.term2==36).groupBy(df.grade).agg(F.mean(df.ER).alias('ER36mean'), F.stddev(df.ER).alias('ER36sd'))
+#ER36.sort('grade').show()
+# +-----+-------------------+-------------------+                                 
+# |grade|           ER36mean|             ER36sd|
+# +-----+-------------------+-------------------+
+# |    A| 0.5719117699974812|0.49481057718338295|
+# |    B| 0.5505616008691233| 0.4974413135831339|
+# |    C|  0.528578874218207|0.49918980691847653|
+# |    D|0.49854093073260636| 0.5000106704025198|
+# |    E| 0.4868519909842224|0.49988969963910895|
+# |    F| 0.4368794326241135|0.49635193988434306|
+# |    G| 0.4864864864864865| 0.5067117097095317|
+# +-----+-------------------+-------------------+
+ER60 = df.filter(df.term2==60).groupBy(df.grade).agg(F.mean(df.ER).alias('ER60mean'), F.stddev(df.ER).alias('ER60sd'))
+#ER60.sort('grade').show()
+# +-----+------------------+-------------------+                                  
+# |grade|          ER60mean|             ER60sd|
+# +-----+------------------+-------------------+
+# |    A|0.7861356932153393|0.41033486976071437|
+# |    B|0.7346020053202373| 0.4415900828240326|
+# |    C|0.6888206204106099|0.46299334256719205|
+# |    D| 0.629277566539924| 0.4830310492302113|
+# |    E|0.5855280659749933| 0.4926634091801306|
+# |    F|0.5581901239939091|  0.496656388107999|
+# |    G|0.5482233502538071| 0.4979218916924311|
+# +-----+------------------+-------------------+
 
-#if needed
-#def60mean.show()
-#def60sd.show()
 
-#Time when last payment received for all defaulted loans
-defTime36mean = df.filter(df.term2==36).filter(df.loan_status==1).groupBy(df.grade).agg(F.mean(df.fracNumPmts).alias('defTime36mean'))
-defTime36sd = df.filter(df.term2==36).filter(df.loan_status==1).groupBy(df.grade).agg(F.stddev(df.fracNumPmts).alias('defTime36sd'))
-defTime60mean = df.filter(df.term2==60).filter(df.loan_status==1).groupBy(df.grade).agg(F.mean(df.fracNumPmts).alias('defTime60mean'))
-defTime60sd = df.filter(df.term2==60).filter(df.loan_status==1).groupBy(df.grade).agg(F.stddev(df.fracNumPmts).alias('defTime60sd'))
+defTime36 =  df.filter(df.term2==36).filter(df.loan_status==1).groupBy(df.grade).agg(F.mean(df.fracNumPmts).alias('defTime36mean'),
+																	F.stddev(df.fracNumPmts).alias('defTime36sd'))
+defTime60 =  df.filter(df.term2==60).filter(df.loan_status==1).groupBy(df.grade).agg(F.mean(df.fracNumPmts).alias('defTime60mean'),
+																	F.stddev(df.fracNumPmts).alias('defTime60sd'))
 
+#ER time early repayment only
+ERTime36 = df.filter(df.term2==36).filter(df.ER==1).groupBy(df.grade).agg(F.mean(df.fracNumPmts).alias('ERTime36mean'),
+															F.stddev(df.fracNumPmts).alias('ERTime36sd'))
+ERTime60 = df.filter(df.term2==60).filter(df.ER==1).groupBy(df.grade).agg(F.mean(df.fracNumPmts).alias('ERTime60mean'),
+															F.stddev(df.fracNumPmts).alias('ERTime60sd'))
 
-#Time when loans are repaid (as planned or early)
-repTime36mean = df.filter(df.term2==36).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.fracNumPmts).alias('repTime36mean'))
-repTime36sd = df.filter(df.term2==36).filter(df.loan_status==0).groupBy(df.grade).agg(F.stddev(df.fracNumPmts).alias('repTime36sd'))
-repTime60mean = df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.mean(df.fracNumPmts).alias('repTime60mean'))
-repTime60sd = df.filter(df.term2==60).filter(df.loan_status==0).groupBy(df.grade).agg(F.stddev(df.fracNumPmts).alias('repTime60sd'))
 
 #Join all of them up by grade
-grade_table = def36mean.join(def36sd, def36mean.grade==def36sd.grade,'inner').drop(def36sd.grade)
-grade_table = grade_table.join(def60mean, grade_table.grade==def60mean.grade,'inner').drop(def60mean.grade)
-grade_table = grade_table.join(def60sd, grade_table.grade==def60sd.grade,'inner').drop(def60sd.grade)
-grade_table = grade_table.join(defTime36mean, grade_table.grade==defTime36mean.grade,'inner').drop(defTime36mean.grade)
-grade_table = grade_table.join(defTime36sd, grade_table.grade==defTime36sd.grade,'inner').drop(defTime36sd.grade)
-grade_table = grade_table.join(defTime60mean, grade_table.grade==defTime60mean.grade,'inner').drop(defTime60mean.grade)
-grade_table = grade_table.join(defTime60sd, grade_table.grade==defTime60sd.grade,'inner').drop(defTime60sd.grade)
-grade_table = grade_table.join(repTime36mean, grade_table.grade==repTime36mean.grade,'inner').drop(repTime36mean.grade)
-grade_table = grade_table.join(repTime36sd, grade_table.grade==repTime36sd.grade,'inner').drop(repTime36sd.grade)
-grade_table = grade_table.join(repTime60mean, grade_table.grade==repTime60mean.grade,'inner').drop(repTime60mean.grade)
-grade_table = grade_table.join(repTime60sd, grade_table.grade==repTime60sd.grade,'inner').drop(repTime60sd.grade)
+grade_table = def36.join(def60, def36.grade==def60.grade,'inner').drop(def36.grade)
+grade_table = grade_table.join(ER36, grade_table.grade==ER36.grade,'inner').drop(ER36.grade)
+grade_table = grade_table.join(ER60, grade_table.grade==ER60.grade,'inner').drop(ER60.grade)
+grade_table = grade_table.join(defTime36, grade_table.grade==defTime36.grade,'inner').drop(defTime36.grade)
+grade_table = grade_table.join(defTime60, grade_table.grade==defTime60.grade,'inner').drop(defTime60.grade)
+grade_table = grade_table.join(ERTime36, grade_table.grade==ERTime36.grade,'inner').drop(ERTime36.grade)
+grade_table = grade_table.join(ERTime60, grade_table.grade==ERTime60.grade,'inner').drop(ERTime60.grade)
 
+
+#optional
 grade_table = grade_table.sort(grade_table.grade)
 
-grade_table = grade_table.select(['grade', 'def36mean', 'def36sd', 'def60mean', 'def60sd', 'defTime36mean', 
-						'defTime36sd', 'defTime60mean', 'defTime60sd', 'repTime36mean', 'repTime36sd', 'repTime60mean', 'repTime60sd'])
+#expensive, switching columns around, optional
+# grade_table = grade_table.select('grade', 'def36mean', 'def36sd', 'def60mean', 'def60sd', 'defTime36mean', 
+# 						'defTime36sd', 'defTime60mean', 'defTime60sd', 
+# 						'repTime36mean', 'repTime36sd', 'repTime60mean', 'repTime60sd',
+# 						'ER36mean', 'ER36sd','ER60mean','ER60sd',
+# 						 'ERTime36mean', 'ERTime36sd', 'ERTime60mean', 'ERTime60sd')
 
 #grade_table.show()
 
