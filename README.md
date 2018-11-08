@@ -100,5 +100,6 @@ Data from Lending Club: About 183,000 loans in this sample.
 * **cleanWalk.sh** this script is a crosswalk from ZIPxx (only first 3 digits available, last 2 digits hidden) to County FIPS Code. ZIPxx cannot be mapped to a unique code. For example, 787xx (Austin, TX area zip codes) can belong to three counties (Hays, Travis, Williamson). This script provides the odds ratios for assign a ZIPxx to a list of potential counties. 
 * **fipsLendMap.py** is the  (pySpark/SparkSQL) code to join the lending club data with the ZIPXX to FIPS codes available in **utZipLowerXX.csv**
 *  **sprkLCprePay.py** for default and repayment stats, **repayRegs.py** (pySpark/SparkML) for the regressions.
-* Example data prep for Neural Nets in **prepDataforNN.py** and the Feed Forward Neural Net using pyTorch in **modelLendNN.py**
-* **barplot.py** for the bar plots and **pdDefRate.csv** (bar plot data). 
+* Example data prep for Neural Nets in **prepDataforNN.py**
+* Feed Forward Neural Nets using pyTorch in **modelNNSimple.py** and **modelNNCounterFactual.py**. The counterfactual version uses original as well as synthetic (simulated data) to create values when there is no ground truth, such as the timing of early repayment when the loan was actually not repaid at all. The synthetic data are based on random sampling of the conditional distributions, see **prepDataforNN.py**
+* **pdDefRate.csv** data used for the bar plots. 
