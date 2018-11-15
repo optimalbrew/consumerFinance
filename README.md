@@ -11,17 +11,24 @@ The map shows a ratio of the rate of early repayment over the rate of default fo
 
 We expect higher default rates for loans with poorer credit ratings. As for the timing of default, we expect lower rated debt to default earlier (all else equal). As long as default rates are in line with what investors expect, there is not much cause for concern. Investors are hurt only if default rates exceed expected levels by a significant margin.
 
-I am more interested in studying early repayment than defaul. Unlike default, early repayment is always a rational and strategic decision, one that requires cognitive effort and self-control. The decision also displays optimism and confidence, especially if there is a lot of time left on the clock. Of course, one could run a multivariate regression to jointly predict the likelihood repayment or default and the respective conditional likelihoods for the timeline.
+I am more interested in studying early repayment than default. Unlike default, early repayment is always a rational and strategic decision, one that requires cognitive effort and self-control. The decision also displays optimism and confidence, especially if there is a lot of time left on the clock. Of course, one could run a multivariate regression to jointly predict the likelihood repayment or default and the respective conditional likelihoods for the timeline.
 
+## Time trends in default and early repayment
+The plots show trends in default rates and early repayment rates (measured as percent of all outstanding loans in a time period for the five largest states (by marketsize).
+
+![time Trends](./trendsDefER.png)
+
+Trends in the ratio of borrower's outstanding debts to income and the fraction of longer (60 months)vs. shorter loan terms (36 months).
+![dti](./trendDtiTermRatio.png)
 ## Predictions from neural net
 Overall predictions (means)
-![Overall predictions](predsNNOverall.png)
+![Overall predictions](./predsNNOverall.png)
 
 Predicted early repayment timeline (number of payments)
-![Overall predictions](predsNNDensityERCond.png)
+![Overall predictions](./predsNNDensityERCond.png)
 
 Predicted default timeline (number of payments)
-![Overall predictions](predsNNDensityDefCond.png)
+![Overall predictions](./predsNNDensityDefCond.png)
 
 ## So who is repaying earlier than expected and is this really a problem?
 
@@ -103,3 +110,5 @@ Data from Lending Club: About 183,000 loans in this sample.
 * Example data prep for Neural Nets in **prepDataforNN.py**
 * Feed Forward Neural Nets using pyTorch in **modelNNSimple.py** and **modelNNCounterFactual.py**. The counterfactual version uses original as well as synthetic (simulated data) to create values when there is no ground truth, such as the timing of early repayment when the loan was actually not repaid at all. The synthetic data are based on random sampling of the conditional distributions, see **prepDataforNN.py**
 * **pdDefRate.csv** data used for the bar plots. 
+* **rendsERandDef.py** Spark code to obtain the time trends in default, repayment. 
+* **resultsState.csv** time trends data by state
