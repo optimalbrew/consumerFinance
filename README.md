@@ -14,12 +14,10 @@ We expect higher default rates for loans with poorer credit ratings. As for the 
 I am more interested in studying early repayment than default. Unlike default, early repayment is always a rational and strategic decision, one that requires cognitive effort and self-control. The decision also displays optimism and confidence, especially if there is a lot of time left on the clock. Of course, one could run a multivariate regression to jointly predict the likelihood repayment or default and the respective conditional likelihoods for the timeline.
 
 ## Time trends in default and early repayment
-The plots show trends in default rates and early repayment rates (measured as percent of all outstanding loans in a time period for the five largest states (by marketsize).
+The plots show trends in number of loans issued, the ratio of long to short duration loans, borrowers incomes and debt levels, and finally the default rates and early repayment rates (for the five largest states (by marketsize).
 
-![time Trends](./trendsDefER.png)
+![time Trends](./QtrlytrendCombo.png)
 
-Trends in the ratio of borrower's outstanding debts to income and the fraction of longer (60 months)vs. shorter loan terms (36 months).
-![dti](./trendDtiTermRatio.png)
 ## Predictions from neural net
 Overall predictions (means)
 ![Overall predictions](./predsNNOverall.png)
@@ -111,4 +109,4 @@ Data from Lending Club: About 183,000 loans in this sample.
 * Feed Forward Neural Nets using pyTorch in **modelNNSimple.py** and **modelNNCounterFactual.py**. The counterfactual version uses original as well as synthetic (simulated data) to create values when there is no ground truth, such as the timing of early repayment when the loan was actually not repaid at all. The synthetic data are based on random sampling of the conditional distributions, see **prepDataforNN.py**
 * **pdDefRate.csv** data used for the bar plots. 
 * **rendsERandDef.py** Spark code to obtain the time trends in default, repayment. 
-* **resultsState.csv** time trends data by state
+* **merge0.csv** quarterly time trends data by state
