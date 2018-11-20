@@ -21,7 +21,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv('data/resultsState.csv')
+df = pd.read_csv('data/merge0.csv')
 
 df.columns
 # Index(['defcount', 'addr_state', 'ERcount', 'Schcount', 'Curcount', 'DTI',
@@ -29,9 +29,7 @@ df.columns
 #        'termRatio'],
 #       dtype='object')
 
-df.columns = ['defcount', 'State', 'ERcount', 'Schcount', 
-	'Curcount', 'DTI','Income', 'shortcount', 'longcount', 'Period', 
-	'ER_rate', 'Def_rate', 'termRatio']
+df['numLoans_issued'] = df.shortcount+df.longcount
 
 df.head()
 # 	 defcount state  ERcount  Schcount  Curcount        DTI        income  shortcount  longcount      Period   ER_rate  Def_rate  termRatio
@@ -56,8 +54,14 @@ plt.show()
 
 
 # Newly issued loans
-timePivottermRatio = df.pivot(index='Period', columns='State',values='termRatio') 
 
+#total loans issued
+timePivotIssued = df.pivot(index='Period', columns='State',values='numLoans_issued') 
+timePivotIssued[['CA', 'TX', 'NY', 'FL', 'IL']].plot()
+plt.show()
+
+#term length
+timePivottermRatio = df.pivot(index='Period', columns='State',values='termRatio') 
 timePivottermRatio[['CA', 'TX', 'NY', 'FL', 'IL']].plot()
 plt.show()
 
@@ -67,9 +71,10 @@ plt.show()
 
 
 ##income increasing
-timePivotIncome = df.pivot(index='Period', columns='State',values='Income')  
-# timePivotIncome[['CA', 'TX', 'NY', 'FL', 'IL']].plot()
-# plt.show()
+timePivotIncome = df.pivot(index='Period', columns='State',values='income')  
+timePivotIncome[['CA', 'TX', 'NY', 'FL', 'IL']].plot()
+plt.show()
+
 
 # fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8, 8))
 # timePivotDef_Rate[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[0,0]); axes[0,0].set_title('A');
@@ -79,13 +84,33 @@ timePivotIncome = df.pivot(index='Period', columns='State',values='Income')
 # plt.show()
 
 fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
-timePivotDef_Rate[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[0]); axes[0].set_title('Default Rate (%)');
-timePivotER_Rate[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[1]); axes[1].set_title('Early Repayment Rate (%)');
+timePivotDef_Rate[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[0]); axes[0].set_title('Default Rates (%)');
+timePivotER_Rate[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[1]); axes[1].set_title('Early Repayment Rates (%)');
 #plt.show()
-plt.savefig('images/trendsDefER.png')
+plt.savefig('images/QrtlytrendsDefER.png')
 
 fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
-timePivotDTI[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[0]); axes[0].set_title('Debt to Income Ratio (%)');
+timePivotDTI[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[1]); axes[1].set_title('Debt to Income Ratios (%)');
+timePivotIncome[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[0]); axes[0].set_title('Borrower Incomes');
+#plt.show()
+plt.savefig('images/QrtlytrendIncome.png')
+
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
+timePivotIssued[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[0]); axes[0].set_title('Number of Loans Issued');
 timePivottermRatio[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[1]); axes[1].set_title('Loan Term Ratio (5yr/3yr)');
 #plt.show()
-plt.savefig('images/trendDtiTermRatio.png')
+plt.savefig('images/QrtlytrendloansTerms.png')
+
+
+
+##all in one
+fig, axes = plt.subplots(nrows=3, ncols=2, figsize=(10, 8), sharex=True)
+timePivotIssued[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[0,0]); axes[0,0].set_title('Number of Loans Issued');
+timePivottermRatio[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[0,1]); axes[0,1].set_title('Loan Term Ratio (5yr/3yr)');
+timePivotIncome[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[1,0]); axes[1,0].set_title('Borrower Incomes');
+timePivotDTI[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[1,1]); axes[1,1].set_title('Debt to Income Ratios (%)');
+timePivotDef_Rate[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[2,0]); axes[2,0].set_title('Default Rates (%)');
+timePivotER_Rate[['CA', 'TX', 'NY', 'FL', 'IL']].plot(ax=axes[2,1]); axes[2,1].set_title('Early Repayment Rates (%)');
+#plt.show()
+plt.savefig('images/QrtlytrendCombo.png')
+
