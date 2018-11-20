@@ -7,16 +7,17 @@ Investors in fixed income securities (like p2p lending) must account for the pos
 
 The map shows a ratio of the rate of early repayment over the rate of default for 2017-18. Ratio actually understates the rate of early repayment because there is an adjustment to avoid division by zero errors. As macroeconomic conditions change, we anticipate early repayment and default rates to move in opposite directions.
 
-![LC Default and Repayment plot](./subplotsNoError.png)
-
-We expect higher default rates for loans with poorer credit ratings. As for the timing of default, we expect lower rated debt to default earlier (all else equal). As long as default rates are in line with what investors expect, there is not much cause for concern. Investors are hurt only if default rates exceed expected levels by a significant margin.
-
-I am more interested in studying early repayment than default. Unlike default, early repayment is always a rational and strategic decision, one that requires cognitive effort and self-control. The decision also displays optimism and confidence, especially if there is a lot of time left on the clock. Of course, one could run a multivariate regression to jointly predict the likelihood repayment or default and the respective conditional likelihoods for the timeline.
-
 ## Time trends in default and early repayment
 The plots show trends in number of loans issued, the ratio of long to short duration loans, borrowers incomes and debt levels, and finally the default rates and early repayment rates (for the five largest states (by marketsize).
 
-![time Trends](./QtrlytrendCombo.png)
+![time Trends](./QrtlytrendCombo.png)
+
+We expect higher default rates for loans with poorer credit ratings. As for the timing of default, we expect lower rated debt to default earlier (all else equal). As long as default rates are in line with what investors expect, there is not much cause for concern. Investors are hurt only if default rates exceed expected levels by a significant margin.
+
+![LC Default and Repayment plot](./subplotsNoError.png)
+
+I am more interested in studying early repayment than default. Unlike default, early repayment is always a rational and strategic decision, one that requires cognitive effort and self-control. The decision also displays optimism and confidence, especially if there is a lot of time left on the clock. Of course, one could run a multivariate regression to jointly predict the likelihood repayment or default and the respective conditional likelihoods for the timeline.
+
 
 ## Predictions from neural net
 Overall predictions (means)
